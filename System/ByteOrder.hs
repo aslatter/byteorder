@@ -46,7 +46,7 @@ byteOrderIO = byteListToByteOrder `fmap` wordToByteList input
 
 wordToByteList :: Word32 -> IO [Word8]
 wordToByteList word = alloca $ \wordPtr -> do
-         poke wordPtr input
+         poke wordPtr word
          peekArray 4 (castPtr wordPtr)
 
 byteListToByteOrder :: [Word8] -> ByteOrder
