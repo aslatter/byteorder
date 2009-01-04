@@ -1,5 +1,5 @@
 Name:         byteorder
-Version:      1.0.0
+Version:      1.0.1
 Cabal-Version:  >= 1.2
 Synopsis:      native byte-ordering of the system
 Description:   This package is for working with the native byte-ordering of
