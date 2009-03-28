@@ -9,14 +9,12 @@ Stability: unstable
 Portability: requires FFI
 
 -}
+
+{-# OPTIONS_GHC -fno-cse #-}
+
 module System.ByteOrder(byteOrder, ByteOrder(..)) where
 
-import Foreign.Marshal.Array
-import Foreign.Marshal.Alloc
-import Foreign.Storable
-import Foreign.Ptr
 import Foreign
-
 import Data.Word
 
 -- |Indicates the byte-ordering for a 4-byte value, where '1'
@@ -39,18 +37,20 @@ input = 0x01020304
 
 -- |Returns the native byte ordering of the system.
 byteOrder :: ByteOrder
-byteOrder = unsafePerformIO $ byteOrderIO
+byteOrder = unsafePerformIO byteOrderIO
+{-# NOINLINE byteOrder #-}
 
 byteOrderIO :: IO ByteOrder
-byteOrderIO = byteListToByteOrder `fmap` wordToByteList input
+byteOrderIO = bytesToByteOrder `fmap` wordToBytes input
 
-wordToByteList :: Word32 -> IO [Word8]
-wordToByteList word = alloca $ \wordPtr -> do
+wordToBytes :: Word32 -> IO (Word8,Word8,Word8,Word8)
+wordToBytes word = alloca $ \wordPtr -> do
          poke wordPtr word
-         peekArray 4 (castPtr wordPtr)
+         [x1,x2,x3,x4] <- peekArray 4 (castPtr wordPtr)
+         return (x1,x2,x3,x4)
 
-byteListToByteOrder :: [Word8] -> ByteOrder
-byteListToByteOrder [1, 2, 3, 4] = BigEndian
-byteListToByteOrder [4, 3, 2, 1] = LittleEndian
-byteListToByteOrder xs@[x1, x2, x3, x4] = Mixed (x1,x2,x3,x4)
+bytesToByteOrder :: (Word8,Word8,Word8,Word8) -> ByteOrder
+bytesToByteOrder (1, 2, 3, 4)     = BigEndian
+bytesToByteOrder (4, 3, 2, 1)     = LittleEndian
+bytesToByteOrder (x1, x2, x3, x4) = Mixed (x1,x2,x3,x4)
 
