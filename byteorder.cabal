@@ -1,6 +1,7 @@
 Name:         byteorder
 Version:      1.0.2
-Cabal-Version:  >= 1.2
+Cabal-Version:  >= 1.6
+Synopsis:      Exposes the native endianess or byte ordering of the system.
 Description:   This package is for working with the native byte-ordering of
   the system.
 
@@ -13,7 +14,11 @@ Build-type: Simple
 
 Category: System
 
+Source-Repository head
+  type:   darcs
+  location: http://community.haskell.org/~aslatter/code/byteorder/
+
 Library
 
- Build-depends: base
+ Build-depends: base == 4.*
  Exposed-modules: System.ByteOrder
