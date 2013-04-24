@@ -1,0 +1,4 @@
+1.0.4
+
+Cleaned up imports in System.ByteOrder to work better with newer
+versions of GHC.
