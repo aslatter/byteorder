@@ -5,8 +5,6 @@ Copyright : (c) Antoine Latter 2009
 License : BSD3
 
 Maintainer : Antoine Latter <aslatter@gmail.com>
-Stability: unstable
-Portability: requires FFI
 
 -}
 
@@ -14,8 +12,12 @@ Portability: requires FFI
 
 module System.ByteOrder(byteOrder, ByteOrder(..)) where
 
-import Foreign
+import Foreign.Marshal.Alloc (alloca)
+import Foreign.Marshal.Array (peekArray)
+import Foreign.Ptr (castPtr)
+import Foreign.Storable (poke)
 import Data.Word
+import System.IO.Unsafe (unsafePerformIO)
 
 -- |Indicates the byte-ordering for a 4-byte value, where '1'
 -- indicates the most-significant byte and '4' indicates the
